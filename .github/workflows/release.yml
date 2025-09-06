@@ -25,7 +25,7 @@ jobs:
       - name: Verify build
         run: |
           go mod tidy
-          go build -o tz ./tz
+          go build -o tz .
           ./tz --version
 
       - name: Run GoReleaser

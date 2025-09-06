@@ -8,11 +8,14 @@ import (
 
 func main() {
 	args := os.Args
+	fmt.Println(len(args))
+	if len(args) != 5 {
+		fmt.Println("tz")
+		os.Exit(0)
+	}
+
 	fmt.Println("All arguments with program name:", args)
 	fmt.Println("Arguments only:", args[1:])
-	if len(args) != 5 {
-		usage()
-	}
 	pathArgs := args[1:4]
 	modulePath := filepath.Join(pathArgs...)
 
