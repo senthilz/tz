@@ -8,6 +8,8 @@
 
 version: 2
 
+project_name: tz
+
 before:
   hooks:
     # You may remove this if you don't use go modules.
@@ -24,6 +26,17 @@ builds:
     goarch:
       - amd64
       - arm64
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}}
+source:
+  enabled: false  # ← This disables source code inclusion
+
+signs:
+  - artifacts: binary
+    # This enables basic ad-hoc signing for macOS
+    args: ["--force", "--output", "${signature}", "--detach-sig", "${artifact}"]
+    cmd: signtool
+    # Or use gon for better macOS signing (see below)
 
 archives:
   - formats: [tar.gz]
@@ -35,6 +48,9 @@ archives:
       {{- else if eq .Arch "386" }}i386
       {{- else }}{{ .Arch }}{{ end }}
       {{- if .Arm }}v{{ .Arm }}{{ end }}
+
+checksum:
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
 
 changelog:
   sort: asc
