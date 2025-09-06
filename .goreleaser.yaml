@@ -28,8 +28,8 @@ builds:
       - arm64
     ldflags:
       - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}}
-source:
-  enabled: false  # ← This disables source code inclusion
+  source:
+    enabled: false  # ← This disables source code inclusion
 
 signs:
   - artifacts: binary
