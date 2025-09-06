@@ -1,3 +1,3 @@
-module githb.com/senthilz/tz
+module github.com/senthilz/tz
 
 go 1.24.5
