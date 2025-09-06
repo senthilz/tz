@@ -1,34 +1,34 @@
+name: Release
+
 on:
-  workflow_dispatch:
   push:
     tags:
-      - "*"
+      - 'v*'
 
 permissions:
-  contents: write
+  contents: write  # This is crucial!
+  packages: write
+  issues: write
 
 jobs:
-  build:
-    name: GoReleaser Build
+  goreleaser:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check out code into the Go module directory
+      - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set Up Go
-        uses: actions/setup-go@v5
+      - name: Set up Go
+        uses: actions/setup-go@v4
         with:
-          go-version: "1.x"
-        id: go
+          go-version: '1.21'
 
-      - name: run GoReleaser
-        uses: goreleaser/goreleaser-action@v6
-        env:
-          HOMEBREW_TOKEN: ${{ secrets.HOMEBREW_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v5
         with:
+          distribution: goreleaser
+          version: 'latest'
           args: release --clean
-
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
