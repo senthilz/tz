@@ -55,7 +55,7 @@ jobs:
 
       - name: Verify build
         run: |
-          go build -o tz ./cmd/tz || \
+          go build -o tz . || \
           echo "Build failed - check your main.go location"
           [ -f "./tz" ] && ./tz --version || echo "Binary not found"
 
