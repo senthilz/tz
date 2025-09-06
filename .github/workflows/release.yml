@@ -46,10 +46,15 @@ jobs:
           echo "Go files:"
           find . -name "*.go" -type f
 
+      - name: Initialize module
+        run: |
+          if [ ! -f go.mod ]; then
+            go mod init github.com/${{ github.repository }}
+          fi
+          go mod tidy
+
       - name: Verify build
         run: |
-          go mod tidy
-          # Try different build paths until one works:
           go build -o tz ./cmd/tz || \
           echo "Build failed - check your main.go location"
           [ -f "./tz" ] && ./tz --version || echo "Binary not found"
