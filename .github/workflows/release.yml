@@ -15,7 +15,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          clean: true
           fetch-depth: 0
+          fetch-tags: true
+      - name: Debug initial state
+        run: |
+          echo "Initial git status:"
+          git status
+          echo "File in workspace:"
+          ls -la
+
+      - name: Clean any potential mess
+        run: |
+          git reset --hard HEAD
+          git clean -fdx
+          echo "Status after cleaning:"
+          git status
 
       - name: Set up Go
         uses: actions/setup-go@v4
@@ -38,6 +53,16 @@ jobs:
           go build -o tz ./cmd/tz || \
           echo "Build failed - check your main.go location"
           [ -f "./tz" ] && ./tz --version || echo "Binary not found"
+
+      - name: Final git check
+        run: |
+          echo "Final git status before GoReleaser:"
+          git status --porcelain
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "ERROR: Still dirty! Files:"
+            git status --porcelain
+            exit 1
+          fi
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v5

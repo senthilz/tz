@@ -1,2 +1,10 @@
 # Added by goreleaser init:
 dist/
+# Binaries
+tz
+tz-*
+tz.exe
+tz*.exe
+
+# Build artifacts
+/.goreleaser/
